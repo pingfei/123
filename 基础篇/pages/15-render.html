@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>进阶之rander函数</title>
+</head>
+<body>
+  <div id="app">
+    <anchor :level="1" title="特性">特性</anchor>
+  </div>
+  <script src="../js/vue.min.js"></script>
+  <script>
+    Vue.component('anchor', {
+      props: {
+        level: {
+          type: Number,
+          required: true
+        },
+        title: {
+          type: String,
+          default: ''
+        }
+      },
+      render (createElement) {
+        return createElement(
+          'h' + this.level,
+          [
+            createElement(
+              'a',
+              {
+                // domProps: {
+                //   href: '#' + this.title,
+                //   title: this.title
+                // },
+                style: {
+                  color: 'red'
+                },
+                attrs: {
+                  id: 'foo',
+                  href: '#' + this.title + '123',
+                }
+              },
+              this.$slots.default
+            ),
+            createElement(
+              'p', 'test'
+            )
+          ]
+        )
+      }
+    })
+    new Vue({
+      el: '#app'
+    })
+  </script>
+</body>
+</html>

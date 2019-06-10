@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <component-a></component-a>
+    <component-b></component-b>
+  </div>
+  <script src="../js/vue.min.js"></script>
+  <script>
+    var bus = new Vue()
+    Vue.component('component-a', {
+      template: '<button @click="handleEvent">传递事件</button>',
+      methods: {
+        handleEvent () {
+          bus.$emit('onMessage', '来自a组件的信息')
+        }
+      }
+    })
+    var B = Vue.component('component-b', {
+      template: '<div>afs{{message}}<div>',
+      data () {
+        return {
+          message: ''
+        }
+      },
+      beforeCreate () {
+        bus.$on('onMessage', function (msg) {
+          console.log(msg)
+          console.log(this)
+          console.log(B.message)
+          B.message = msg
+        })
+      }
+    })
+    new Vue({
+      el: '#app',
+      data () {
+        return {
+          a: 1
+        }
+      }
+    })
+  </script>
+</body>
+</html>

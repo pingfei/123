@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <my-component v-model="total"></my-component>
+    <p>总数: {{total}}</p>
+  </div>
+  <script src="../js/vue.min.js"></script>
+  <script>
+    Vue.component('my-component', {
+      template: '<button @click="handleClick">+1</button>',
+      data () {
+        return {
+          count: 0
+        }
+      },
+      methods: {
+        handleClick () {
+          this.count ++ 
+          this.$emit('input', this.count)
+        }
+      }
+    })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        total: 0
+      }
+    })
+  </script>
+</body>
+</html>

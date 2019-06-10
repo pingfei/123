@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <ele>
+      <div>
+        <child></child>
+      </div>
+    </ele>
+  </div>
+  <script src="../js/vue.min.js"></script>
+  <script>
+    // Vue.component('child', {
+    //   render (createElement) {
+    //     return createElement('p', 'text')
+    //   }
+    // })
+    // Vue.component('ele', {
+    //   render (createElement) {
+    //     return createElement('div', [
+    //       this.$slots.default,
+    //       this.$slots.default
+    //     ])
+    //   }
+    // })
+    var child = {
+      render (createElement) {
+        return createElement('p', 'text')
+      }
+    }
+    Vue.component('ele', {
+      render (createElement) {
+        var childNode = createElement(child)
+        return createElement('div', [
+          childNode,
+          childNode
+        ])
+        // return createElement(
+        //   'div',
+        //   Array.apply(null, {
+        //     length: 5
+        //   }).map(function () {
+        //     return createElement(child)
+        //   })
+        // )
+      }
+    })
+    new Vue({
+      el: '#app'
+    })
+  </script>
+</body>
+</html>

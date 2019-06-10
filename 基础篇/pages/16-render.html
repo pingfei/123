@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <ele></ele>
+  </div>
+  <script src="../js/vue.js"></script>
+  <script type="text/javascript">
+    var localHandler = function(data){
+        console.log(data.result);
+    };
+  </script>
+  <script>
+    var child = {
+      render (createElement) {
+        console.log('html - 1 : ')
+        console.log(createElement)
+        return createElement('p', 'text')
+      }
+    }
+    Vue.component('ele', {
+      render (createElement) {
+        // console.log(child)
+        console.log('html - 2 : ')
+        console.log(createElement)
+        var childNode = createElement(child)
+        // console.log(childNode)
+        return createElement('div', [
+          childNode,
+          childNode
+        ])
+      }
+    })
+    var app = new Vue({
+      el: '#app'
+    })
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>计算时间</title>
+  <style>
+    body {
+      --color: red;
+    }
+    .demo {
+      color: var(--color);
+    }
+  </style>
+  <style>
+    .container{
+      margin:0 auto;
+      width: 500px;
+      border: 1px solid red;
+      display: inline-block;
+    }
+    .child {
+      height: 100px;
+      border: 1px solid green;
+      float: left;
+    }
+    .clear:after{
+        content: "";
+        display: block;
+        clear: both;
+        display: inline-block;
+
+    }
+    /* .clear {
+      clear: both;
+    } */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="child"></div>
+    <div class="clear"></div>
+  </div>
+  <div id="div"></div>
+  <div class="demo">dadfsasdf</div>
+  <script>
+    function add (...item) {
+      let tmin = 0
+      let tsec = 0
+      for(let i in item) {
+        let time = item[i]
+        let index = time.indexOf(':') > -1 ?time.indexOf(':') : time.indexOf('：')
+        let minutes = parseInt(time.slice(0, index))
+        let seconds = parseInt(time.slice(index+1))
+        tmin += minutes
+        tsec += seconds
+      }
+      tmin += Math.floor(tsec/60)
+      console.log(tmin + ':' + (tsec%60))
+      // return tmin + ':' + (tsec%60)
+    }
+    add('2:06', '1:16','6:46', '2:57', '2:29')
+  </script>
+  <script>
+    //封装适合各种情况的简化版ajax函数
+    //利用解构,获取将来参数对象中每个属性值
+    function ajax({
+      type,//请求类型:'get' || 'post'
+      url, //请求的url地址:'xxx.php'
+      data,//请求携带的参数:'uname=zhangdong&upwd=123456'
+      dataType//服务器端返回值得类型:'json' || 'text'
+    }){
+      //远程请求必有延迟,有延迟必用promise,等待完成后才执行后续操作;并能避免回调地狱的产生
+      return new Promise(callback=>{
+        //1.创建xhr对象
+        let xhr
+        //通过window.XMLHttp来判断浏览器是否支持标准创建
+          //如果支持则,标准创建;如果不支持,则...
+        xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXobject('Microsoft.XMLHttp')
+        //data:'uname=zhangdong&upwd=123456'
+        //如果type是get,并且有传入了data,才需要拼接url和data成get请求的完整地址
+        //url +='?'+data
+        if(type.toLowerCase()=='get' && data!==undefined)
+          url += '?'+data
+        //2.创建请求
+        xhr.open(type,url,true)
+        //3.设置回调函数-onreadystatechange
+        xhr.onreadystatechange = function(){
+          if(xhr.readyState == 4){ 
+            if(xhr.status == 200){
+              //接收响应结果为字符串
+              let resData = xhr.responseText
+              //如果响应消息的类型是json
+              if(dataType!==undefined && dataType.toLowerCase()=='json')
+                resData = JSON.parse(resData)
+              callback(resData)
+            }
+          }
+        }
+        //如果是post,才需要更改消息请求头
+        if(type.toLowerCase()==='post')
+          xhr.setRequestHeader('Content-Type','application/x-www-form-urlencode')
+        //4.发送请求,只有是post,才有请求体
+        xhr.send(type.toLowerCase()=='get'?null:data)
+      })
+    }
+  </script>
+  <!-- <script>
+    // 宏任务 、 微任务
+    console.log('1');
+    setTimeout(function() {
+      console.log('2');
+      process.nextTick(function() {
+        console.log('3');
+      })
+      new Promise(function(resolve) { 
+        console.log('4');
+        resolve();
+      }).then(function() {
+        console.log('5')
+      })
+    })
+    process.nextTick(function() {
+      console.log('6');
+    })
+    new Promise(function(resolve) {
+      console.log('7');
+      resolve();
+    }).then(function() {
+      console.log('8')
+    })
+
+    setTimeout(function() {
+      console.log('9');
+      process.nextTick(function() {
+        console.log('10');
+      })
+      new Promise(function(resolve) {
+        console.log('11');
+        resolve();
+      }).then(function() {
+        console.log('12')
+      })
+    })
+    // 1  7  6  8  2  4  3  5  9  11  10  12
+  </script> -->
+  <script>
+    function ajax ({
+      url,
+      data,
+      type,
+      dataType
+    }) {
+      return new Promise(callback => {
+        let xhr
+        xhr = window.XMLHttpRequest ? new XMLHttpRequest : new ActiveXObject('Microsofr.XMLHttp')
+        if (type.toLowerCase() == 'get' && data != undefined) url += '?' + data
+        xhr.open(type, url, true)
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              let res = xhr.responseText
+              if (dataType != undefined && dataType.toLowerCase() != 'json') {
+                res = JSON.parse(res)
+              }
+              callback(res)
+            }
+          }
+        }
+        if (type.toLowerCase() == 'post') {
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencode')
+        }
+        xhr.send(type.toLowerCase() == 'get'? null: data)
+      })
+    }
+  </script>
+  <script>
+    function test(person) {
+  person.age = 26
+  person = {
+    name: 'yyy',
+    age: 30
+  }
+
+  return person
+}
+const p1 = {
+  name: 'yck',
+  age: 25
+}
+const p2 = test(p1)
+console.log(Array.isArray([])) // -> ?
+console.log([] instanceof Array) // -> ?
+  </script>
+</body>
+</html>

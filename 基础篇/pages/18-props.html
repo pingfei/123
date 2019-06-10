@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>属性</title>
+</head>
+<body>
+  <div id="app">
+    <a href="www.baidu.com" @click.passive="jump">to baidu</a>
+    <!-- 父组件 -->
+    <child-component name="属性"
+                      :type="type"
+                      :is-visible="true"
+                      :on-change="handlePropChange"
+                      :list=[1,2,3]
+                      title="属性demo"
+                      class="test1"
+                      :class="['test2']"
+                      :style="{marginTop: '20px'}"
+                      style="margin-top: 10px">
+    </child-component>
+  </div>
+  <script src="../js/vue.js"></script>
+  <script>
+    // 子组件
+    Vue.component('child-component', {
+      template: `
+        <div>
+          <div v-for="item in list">{{name + item}}</div>
+          <input :name="name" :type="type" v-if="isVisible" @change="onChange"/> {{name}}
+        </div>
+      `,
+      props: {
+        name: String,
+        type: {
+          validator: (value) => {
+            return ['success', 'warning', 'danger'].includes(value)
+          }
+        },
+        onChange: {
+          type: Function,
+          default: () => {}
+        },
+        isVisible: {
+          type: Boolean,
+          default: false
+        },
+        list: {
+          type: Array,
+          default: () => []
+        }
+      }
+    })
+    var app = new Vue({
+      el: '#app',
+      data () {
+        return {
+          type: 'success',
+
+        }
+      },
+      methods: {
+        handlePropChange () {
+          console.log(1)
+        },
+        jump () {
+          console.log('jump')
+        }
+      }
+    })
+    
+  </script>
+</body>
+</html>

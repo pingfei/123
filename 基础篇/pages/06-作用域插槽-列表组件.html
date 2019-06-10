@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <my-list :books="books">
+      <template scope="props">
+        <div>
+          <li>{{props.bookName}}</li>
+        </div>
+      </template>
+    </my-list>
+    <button @click="printSlots">获取slots</button>
+    <component :is="view"></component>
+  </div>
+  <script src="../js/vue.min.js"></script>
+  <script>
+    var mylist = Vue.component('my-list', {
+      template: `
+        <ul>
+          <slot v-for="book in books" :book-name="book.name"></slot>
+        </ul>
+      `,
+      props: {
+        books: {
+          type: Array,
+          default: function () {return []}
+        }
+      }
+    })
+    new Vue({
+      el: '#app',
+      data: {
+        books: [
+          {name: '《Vue.js 实战》'},
+          {name: '《Javascript》'},
+          {name: '《Javascript 高级程序设计》'}
+        ],
+        view: 'com'
+      },
+      methods: {
+        printSlots () {
+          console.log(this.$slots.default)
+        }
+      },
+      components: {
+        com: {template: '<div>a</div>'}
+      }
+    })
+  </script>
+</body>
+</html>

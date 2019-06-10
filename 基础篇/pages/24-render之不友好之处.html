@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../js/vue.js"></script>
+  <script>
+    // 使用 template
+    // var app = new Vue({
+    //   el: '#app',
+    //   template: `
+    //     <Anchor :level='1'>
+    //       <span>一级</span> 标题
+    //     </Anchor>
+    //   `
+    // })
+    // 使用 render
+    var app = new Vue({
+      el: '#app',
+      render (createElement) {
+        return createElement('Anchor',{
+          props: {
+            level: 1
+          }
+        }, [
+          createElement('span', '一级'),
+          '标题'
+        ])
+      }
+    })
+  </script>
+</body>
+</html>
